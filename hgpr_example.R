@@ -231,12 +231,12 @@ data_for_stan = list(
 hgpr_mod = rstan::stan_model('hgpr.stan')
 
 # start the parallel chains
-ezStan::startBigStan(
-	stanMod = hgpr_mod
-	, stanData = data_for_stan
+ezStan::start_stan(
+	mod = hgpr_mod
+	, data = data_for_stan
 	, cores = 4 #set this to the # of physical cores on your system
 	, iter = 2e3 #2e3 takes about 10min when n_subj=10,n_x=20,n_reps=3
-	, stanArgs = "
+	, args = "
 		include = FALSE
 		, pars = c(
 			'f_normal01'
@@ -248,19 +248,19 @@ ezStan::startBigStan(
 )
 
 #watch the chains' progress
-ezStan::watchBigStan()
+ezStan::watch_stan()
 
 #play a sound when done
 beepr::beep()
 
 # collect results
-post = ezStan::collectBigStan()
+post = ezStan::collect_stan()
 
 # kill just in case
-ezStan::killBigStan()
+ezStan::kill_stan()
 
 # delete temp folder
-ezStan::cleanBigStan()
+ezStan::clean_stan()
 
 #how long did it take?
 sort(rowSums(get_elapsed_time(post)/60))
