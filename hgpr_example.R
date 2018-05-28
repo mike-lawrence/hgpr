@@ -228,30 +228,25 @@ data_for_stan = list(
 # Sample the model ----
 
 #compile
-hgpr_mod = rstan::stan_model('hgpr.stan')
+hgpr_mod = ezStan::build_stan('hgpr.stan')
 
 # start the parallel chains
 ezStan::start_stan(
 	mod = hgpr_mod
 	, data = data_for_stan
 	, cores = 4 #set this to the # of physical cores on your system
-	, iter = 2e3 #2e3 takes about 10min when n_subj=10,n_x=20,n_reps=3
-	, args = "
-		include = FALSE
-		, pars = c(
-			'f_normal01'
-			, 'volatility_helper'
-			, 'subj_f_normal01'
-			, 'subj_volatility_helper'
-		)
-	"
+	, iter = 2e2 #2e3 takes about 10min when n_subj=10,n_x=20,n_reps=3
+	, include = FALSE
+	, pars = c(
+		'f_normal01'
+		, 'volatility_helper'
+		, 'subj_f_normal01'
+		, 'subj_volatility_helper'
+	)
 )
 
 #watch the chains' progress
 ezStan::watch_stan()
-
-#play a sound when done
-beepr::beep()
 
 # collect results
 post = ezStan::collect_stan()
